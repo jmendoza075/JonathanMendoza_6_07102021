@@ -1,4 +1,5 @@
 const express = require('express');
+const userRoutes = require('./routes/user');
 
 // Mongoose Dbase Connect
 const mongoose = require('mongoose');
@@ -62,5 +63,7 @@ app.use('/api/sauces', (req, res, next) => {
 	];
 	res.status(200).json(stuff);
 });
+
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
