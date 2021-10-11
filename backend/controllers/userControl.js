@@ -1,11 +1,14 @@
+//CRYPTAGE
 const bcrypt = require('bcrypt');
+
+//TOKEN
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
 
 //NEW USER Signup
 exports.signup = (req, res, next) => {
-	bcrypt
+	bcrypt // Crypted Password //
 		.hash(req.body.password, 10)
 		.then((hash) => {
 			const user = new User({
