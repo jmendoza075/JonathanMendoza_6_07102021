@@ -3,6 +3,9 @@ const express = require('express');
 const userRoutes = require('./routes/userRoute');
 const sauceRoutes = require('./routes/sauceRoute');
 
+//PATH FOR STATIC IMAGE
+const path = require('path');
+
 // MONGOOSE Dbase CONNECT //
 const mongoose = require('mongoose');
 mongoose
@@ -32,6 +35,9 @@ app.use((req, res, next) => {
 
 // JSON OBJECT EXTRACTION. note: body-parser not installed it is  already incuded in Express v4.16 //
 app.use(express.json());
+
+//FOR STATIC IMAGE
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //ROUTES
 app.use('/api/auth', userRoutes);
