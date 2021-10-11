@@ -1,9 +1,9 @@
+// PACKAGE IMPORTATION //
 const express = require('express');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/userRoute');
 
-// Mongoose Dbase Connect
+// MONGOOSE Dbase CONNECT //
 const mongoose = require('mongoose');
-
 mongoose
 	.connect(
 		'mongodb+srv://jmendozaP6:YmA1MhlSEzGPjJRc@cluster0.cehtx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
@@ -12,9 +12,10 @@ mongoose
 	.then(() => console.log('Connexion à MongoDB réussie !'))
 	.catch(() => console.log('Connexion à MongoDB échouée !'));
 
+// EXPRESS PACKAGE //
 const app = express();
 
-//CORS solution
+// SOLUTION TO AVOID CORS « Cross Origin Resource Sharing » //
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader(
@@ -28,42 +29,39 @@ app.use((req, res, next) => {
 	next();
 });
 
-//Pour extraire l'objet JSON
+// JSON OBJECT EXTRACTION. note: body-parser not installed it is  already incuded in Express v4.16 //
 app.use(express.json());
 
-/// midllewares
+// MIDDLEWARES
 
 app.post('/api/sauces', (req, res, next) => {
 	console.log(req.body);
 	res.status(201).json({
-		message: 'Objet créé galing sa client!',
+		message: 'goodmorning Objet créé galing sa client!',
 	});
 });
 
 app.use('/api/sauces', (req, res, next) => {
 	const stuff = [
 		{
-			_id: 'oeihfzeoi',
-			title: 'Mon premier objet',
-			description: 'Les infos de mon premier objet',
+			name: 'unang sili',
+			manufacturer: 'bahay',
+			description: 'ang anghang',
+			mainPepper: 'sili',
 			imageUrl:
 				'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-			price: 4900,
-			userId: 'qsomihvqios',
-		},
-		{
-			_id: 'oeihfzeomoihi',
-			title: 'Mon deuxième objet',
-			description: 'Les infos de mon deuxième objet',
-			imageUrl:
-				'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-			price: 2900,
-			userId: 'qsomihvqios',
+			heat: 6,
+			likes: 1,
+			dislikes: 1,
+			usersLiked: ' ',
+			usersDisliked: ' ',
 		},
 	];
 	res.status(200).json(stuff);
 });
 
+//ROUTES
 app.use('/api/auth', userRoutes);
 
+// EXPORT APPLICATION
 module.exports = app;
