@@ -6,12 +6,17 @@ const fs = require('fs');
 // MIDDLEWARES
 exports.createSauce = (req, res, next) => {
 	const sauceObject = JSON.parse(req.body.sauce);
+	console.log(sauceObject);
 	delete sauceObject._id;
 	const sauce = new Sauce({
 		...sauceObject,
 		imageUrl: `${req.protocol}://${req.get('host')}/images/${
 			req.file.filename
 		}`,
+		likes: 0,
+		dislikes: 0,
+		usersLiked: [' '],
+		usersdisLiked: [' '],
 	});
 
 	sauce
