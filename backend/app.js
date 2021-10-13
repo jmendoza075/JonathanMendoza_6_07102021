@@ -6,7 +6,7 @@ const sauceRoutes = require('./routes/sauceRoute');
 //PATH FOR STATIC IMAGE
 const path = require('path');
 
-// MONGOOSE Dbase CONNECT //
+// MONGOOSE packages for Node.js. to CONNECT Dbase  //
 const mongoose = require('mongoose');
 mongoose
 	.connect(

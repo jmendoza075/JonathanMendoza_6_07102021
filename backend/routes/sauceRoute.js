@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const sauceCtrl = require('../controllers/sauceControl');
-const likeCtrl = require('../controllers/likeControl');
+
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
@@ -13,6 +13,6 @@ router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
 
 //LIKE //
-router.post('/:id/like', auth, likeCtrl.likeOneSauce);
+router.post('/:id/like', auth, sauceCtrl.likesDislikesSauce);
 
 module.exports = router;

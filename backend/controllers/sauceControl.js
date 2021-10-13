@@ -3,10 +3,9 @@ const Sauce = require('../models/sauceModel');
 //FILE SYSTEM
 const fs = require('fs');
 
-// MIDDLEWARES
+// C.R.U.D //
 exports.createSauce = (req, res, next) => {
 	const sauceObject = JSON.parse(req.body.sauce);
-	console.log(sauceObject);
 	delete sauceObject._id;
 	const sauce = new Sauce({
 		...sauceObject,
@@ -65,4 +64,68 @@ exports.deleteSauce = (req, res, next) => {
 			});
 		})
 		.catch((error) => res.status(500).json({ error }));
+};
+
+// LIKES , DISLIKES //
+exports.likesDislikesSauce = (req, res, next) => {
+	let likesOrDislikes = req.body.like;
+	let userId = req.body.userId;
+	let sauceId = req.params.id;
+
+	switch (likesOrDislikes) {
+		// Increment Likes //
+		case 1:
+			Sauce.updateOne(
+				{ _id: sauceId },
+				{ $push: { usersLiked: userId }, $inc: { likes: +1 } }
+			)
+				.then(() => res.status(200).json({ message: `J'aime` }))
+				.catch((error) => res.status(400).json({ error }));
+
+			break;
+
+		// Cancel Likess or Dislikes //
+		case 0:
+			Sauce.findOne({ _id: sauceId })
+				.then((sauce) => {
+					// Cancel Like //
+					if (sauce.usersLiked.includes(userId)) {
+						Sauce.updateOne(
+							{ _id: sauceId },
+							{ $pull: { usersLiked: userId }, $inc: { likes: -1 } }
+						)
+							.then(() => res.status(200).json({ message: `J'aime annulé` }))
+							.catch((error) => res.status(400).json({ error }));
+					}
+
+					// Cancel Dislike //
+					if (sauce.usersDisliked.includes(userId)) {
+						Sauce.updateOne(
+							{ _id: sauceId },
+							{ $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } }
+						)
+							.then(() =>
+								res.status(200).json({ message: `Je n'aime pas annulé` })
+							)
+							.catch((error) => res.status(400).json({ error }));
+					}
+				})
+				.catch((error) => res.status(404).json({ error }));
+			break;
+
+		// Increment Dislikes //
+		case -1:
+			Sauce.updateOne(
+				{ _id: sauceId },
+				{ $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
+			)
+				.then(() => {
+					res.status(200).json({ message: `Je n'aime pas` });
+				})
+				.catch((error) => res.status(400).json({ error }));
+			break;
+
+		default:
+			console.log("Pas d'autre choix");
+	}
 };
