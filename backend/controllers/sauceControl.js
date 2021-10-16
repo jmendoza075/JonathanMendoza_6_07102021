@@ -1,9 +1,11 @@
 const Sauce = require('../models/sauceModel');
 
-//FILE SYSTEM
+//Include the File System module in the application
 const fs = require('fs');
 
 // C.R.U.D //
+
+//Post//
 exports.createSauce = (req, res, next) => {
 	const sauceObject = JSON.parse(req.body.sauce);
 	delete sauceObject._id;
@@ -24,20 +26,23 @@ exports.createSauce = (req, res, next) => {
 		.catch((error) => res.status(400).json({ error }));
 };
 
+//Get All//
 exports.getAllSauce = (req, res, next) => {
 	Sauce.find()
 		.then((sauces) => res.status(200).json(sauces))
 		.catch((error) => res.status(400).json({ error }));
 };
 
+//Get One//
 exports.getOneSauce = (req, res, next) => {
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => res.status(200).json(sauce))
 		.catch((error) => res.status(404).json({ error }));
 };
 
+//Put//
 exports.modifySauce = (req, res, next) => {
-	const sauceObject = req.file
+	const sauceObject = req.file // <- imgFile exist in the body? {yes}:{no},  using Conditional (ternary) operator ? : //
 		? {
 				...JSON.parse(req.body.sauce),
 				imageUrl: `${req.protocol}://${req.get('host')}/images/${
@@ -45,6 +50,7 @@ exports.modifySauce = (req, res, next) => {
 				}`,
 		  }
 		: { ...req.body };
+
 	Sauce.updateOne(
 		{ _id: req.params.id },
 		{ ...sauceObject, _id: req.params.id }
@@ -53,10 +59,12 @@ exports.modifySauce = (req, res, next) => {
 		.catch((error) => res.status(400).json({ error }));
 };
 
+//Delete//
 exports.deleteSauce = (req, res, next) => {
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => {
 			const filename = sauce.imageUrl.split('/images/')[1];
+			// Find the imageFile and deletes it first using the function 'fs.unlink' , then delete the sauce //
 			fs.unlink(`images/${filename}`, () => {
 				Sauce.deleteOne({ _id: req.params.id })
 					.then(() => res.status(200).json({ message: 'Sauce supprimée !' }))
@@ -68,9 +76,10 @@ exports.deleteSauce = (req, res, next) => {
 
 // LIKES , DISLIKES //
 exports.likesDislikesSauce = (req, res, next) => {
-	let likesOrDislikes = req.body.like;
-	let userId = req.body.userId;
 	let sauceId = req.params.id;
+	let userId = req.body.userId;
+
+	let likesOrDislikes = req.body.like;
 
 	switch (likesOrDislikes) {
 		// Increment Likes //

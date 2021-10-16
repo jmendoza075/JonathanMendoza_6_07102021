@@ -1,5 +1,7 @@
 // PACKAGE IMPORTATION //
 const express = require('express');
+const helmet = require('helmet');
+
 const userRoutes = require('./routes/userRoute');
 const sauceRoutes = require('./routes/sauceRoute');
 
@@ -16,8 +18,11 @@ mongoose
 	.then(() => console.log('Connexion à MongoDB réussie !'))
 	.catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// EXPRESS PACKAGE //
+// EXPRESS and HELMET PACKAGE //
 const app = express();
+
+//HELMET PACKAGE //
+app.use(helmet());
 
 // SOLUTION TO AVOID CORS « Cross Origin Resource Sharing » //
 app.use((req, res, next) => {
@@ -42,5 +47,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 //ROUTES
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
+
 // EXPORT APPLICATION
 module.exports = app;
