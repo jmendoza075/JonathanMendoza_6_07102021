@@ -1,6 +1,9 @@
 // PACKAGE IMPORTATION //
 const express = require('express');
+
+//ADDED SECURITY :  Helmet and DotEnv
 const helmet = require('helmet');
+require('dotenv').config();
 
 const userRoutes = require('./routes/userRoute');
 const sauceRoutes = require('./routes/sauceRoute');
@@ -11,10 +14,10 @@ const path = require('path');
 // MONGOOSE packages for Node.js. to CONNECT Dbase  //
 const mongoose = require('mongoose');
 mongoose
-	.connect(
-		'mongodb+srv://jmendozaP6:YmA1MhlSEzGPjJRc@cluster0.cehtx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-		{ useNewUrlParser: true, useUnifiedTopology: true }
-	)
+	.connect(process.env.MY_DATABASE, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
 	.then(() => console.log('Connexion à MongoDB réussie !'))
 	.catch(() => console.log('Connexion à MongoDB échouée !'));
 
