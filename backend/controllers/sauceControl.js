@@ -5,7 +5,7 @@ const fs = require('fs');
 
 // C.R.U.D //
 
-//Post//
+// POST //
 exports.createSauce = (req, res, next) => {
 	const sauceObject = JSON.parse(req.body.sauce);
 	delete sauceObject._id;
@@ -26,23 +26,35 @@ exports.createSauce = (req, res, next) => {
 		.catch((error) => res.status(400).json({ error }));
 };
 
-//Get All//
+// GET All //
 exports.getAllSauce = (req, res, next) => {
 	Sauce.find()
 		.then((sauces) => res.status(200).json(sauces))
 		.catch((error) => res.status(400).json({ error }));
 };
 
-//Get One//
+// GET One//
 exports.getOneSauce = (req, res, next) => {
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => res.status(200).json(sauce))
 		.catch((error) => res.status(404).json({ error }));
 };
 
-//Put//
+// PUT //
 exports.modifySauce = (req, res, next) => {
-	const sauceObject = req.file // <- imgFile exist in the body? {yes}:{no},  using Conditional (ternary) operator ? : //
+	//If new imageFile is sent, Find the OLD image and delete it
+	if (req.file) {
+		Sauce.findOne({ _id: req.params.id })
+			.then((sauce) => {
+				const filename = sauce.imageUrl.split('/images/')[1];
+
+				fs.unlink(`images/${filename}`, () => {});
+			})
+			.catch((error) => res.status(500).json({ error }));
+	}
+
+	//Add new imageFile
+	const sauceObject = req.file
 		? {
 				...JSON.parse(req.body.sauce),
 				imageUrl: `${req.protocol}://${req.get('host')}/images/${
@@ -59,7 +71,7 @@ exports.modifySauce = (req, res, next) => {
 		.catch((error) => res.status(400).json({ error }));
 };
 
-//Delete//
+// DELETE //
 exports.deleteSauce = (req, res, next) => {
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => {
