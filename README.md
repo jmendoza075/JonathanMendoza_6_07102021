@@ -13,9 +13,9 @@ En raison de mesures de sécurités, le lien vers la base de données n'est pas 
 
 ##### Installation et usage
 
-Clone this repo.
-cd frontend: (see frontend_README)
-cd backend: run `npm install`, run `npm start` , run `nodemon server`. This opens http://localhost:3030
+- Clone this repo.
+- cd frontend: (see frontend_README)
+- cd backend: run `npm install`, run `npm start` , run `nodemon server`. This opens http://localhost:3030
 
 ##### Compétences à acquérir
 
