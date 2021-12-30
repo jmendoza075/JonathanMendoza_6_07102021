@@ -5,7 +5,7 @@
 
 # OpenClassroooms Project 6
 
-> "Project 6 : Construisez une API sécurisée pour une application d'avis gastronomiques.
+> "Projet 6 : Construisez une API sécurisée pour une application d'avis gastronomiques.
 
 ### Instructions pour se connecter à la base de données :
 
